@@ -1,27 +1,28 @@
-// Basic demo for accelerometer readings from Adafruit MPU6050
-
-#include <Adafruit_MPU6050.h>
+//#include는 코딩에 필요한 "도구 모음"인 "라이브러리"를 참조하기 위한 명령어입니다!
+#include <Adafruit_MPU6050.h> 
 #include <Adafruit_Sensor.h>
 #include <Wire.h>
 
-Adafruit_MPU6050 mpu;
+//mpu를 사용하겠다고 정의합시다.
+Adafruit_MPU6050 mpu; 
 
-void setup(void) {
-  Serial.begin(115200);
+void setup(void) { //아두이노가 켜질때 같이 실행됩니다. (단 1번)
+  Serial.begin(115200); //115200번대의 시리얼 모니터에서 통신합니다. (간단한 설정을 변경해야해요)
   while (!Serial)
-    delay(10); // will pause Zero, Leonardo, etc until serial console opens
+    delay(10); //혹~시나 시리얼 통신에 문제 생길 것을 대비한 코드입니다. 완전히 준비되었을 때만 통신을 시작해요
 
-  Serial.println("Adafruit MPU6050 test!");
+  Serial.println("MPU6050 테스트!"); //새로운 줄에 출력하는 명령어 입니다.
 
-  // Try to initialize!
-  if (!mpu.begin()) {
-    Serial.println("Failed to find MPU6050 chip");
+  // MPU 센서 설정을 해봅시다.
+  if (!mpu.begin()) { //연결 실패의 경우
+    Serial.println("MPU6050과 연결하는데 실패했습니다.");
     while (1) {
       delay(10);
     }
   }
-  Serial.println("MPU6050 Found!");
+  Serial.println("MPU6050를 찾았습니다."); //연결 성공 
 
+  //--------------------------------------- 센서의 상세 설정입니다.
   mpu.setAccelerometerRange(MPU6050_RANGE_8_G);
   Serial.print("Accelerometer range set to: ");
   switch (mpu.getAccelerometerRange()) {
@@ -83,15 +84,16 @@ void setup(void) {
 
   Serial.println("");
   delay(100);
+  //--------------------------------------- 설정 끝
 }
 
 void loop() {
 
-  /* Get new sensor events with the readings */
+  /* 항시 값을 읽어들이는 명령어 */
   sensors_event_t a, g, temp;
   mpu.getEvent(&a, &g, &temp);
 
-  /* Print out the values */
+  /* 읽어온 값을 출력 */
   Serial.print("Acceleration X: ");
   Serial.print(a.acceleration.x);
   Serial.print(", Y: ");
@@ -114,4 +116,6 @@ void loop() {
 
   Serial.println("");
   delay(500);
+
+  //print와 println의 차이는 엔터를 치냐 안치냐 차이입니다!
 }
